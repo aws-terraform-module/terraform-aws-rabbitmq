@@ -1,6 +1,6 @@
 ## terraform-aws-rabbitmq
 
-We are publishing our module to [**RabbitMQ AWS Terraform**](https://registry.terraform.io/modules/mrnim94/rabbitmq/aws/latest)
+We are publishing our module to [**RabbitMQ AWS Terraform**](https://registry.terraform.io/modules/aws-terraform-module/rabbitmq/aws/latest)
 
 ## You can install RabbitMQ on AWS easily.
 
@@ -38,8 +38,8 @@ data "aws_subnet" "selected" {
 # }
 
 module "rabbitmq" {
-  source  = "mrnim94/rabbitmq/aws"
-  version = "0.0.12"
+  source  = "aws-terraform-module/rabbitmq/aws"
+  version = "1.3.0"
   # insert the 2 required variables here
   rabbitmq_name = "rabbitmq-${var.business_divsion}-${var.environment}"
   engine_version = "3.8.6"
@@ -99,8 +99,8 @@ data "aws_subnet" "selected" {
 # }
 
 module "rabbitmq" {
-  source  = "mrnim94/rabbitmq/aws"
-  version = "0.0.12"
+  source  = "aws-terraform-module/rabbitmq/aws"
+  version = "1.3.0"
   # insert the 2 required variables here
   rabbitmq_name = "rabbitmq-${var.business_divsion}-${var.environment}"
   engine_version = "3.8.6"
@@ -134,8 +134,8 @@ data terraform_remote_state "network" {
 }
 
 module "rabbitmq" {
-  source  = "github.com/mrnim94/terraform-aws-rabbitmq?ref=master"
-  # insert the 2 required variables here
+  source  = "aws-terraform-module/rabbitmq/aws"
+  version = "1.3.0"
   rabbitmq_name = "rabbitmq-${var.business_divsion}-${var.environment}"
   engine_version = "3.8.6"
   deployment_mode = "CLUSTER_MULTI_AZ"
@@ -202,8 +202,8 @@ data "aws_subnets" "private_networks" {
 # }
 
 module "rabbitmq" {
-  source  = "mrnim94/rabbitmq/aws"
-  version = "0.1.1"
+  source  = "aws-terraform-module/rabbitmq/aws"
+  version = "1.3.0"
   # insert the 2 required variables here
   rabbitmq_name         = "rabbitmq-${var.business_divsion}-${var.environment}-19-02-2024"
   engine_version        = "3.10.20"
