@@ -1,6 +1,7 @@
 locals {
   broker_security_groups = var.create_security_group ? [module.security_group[0].security_group_id] : var.security_groups
 
+  
   mq_application_user_needed = var.mq_application_user == ""
   mq_application_user        = local.mq_application_user_needed ? random_pet.mq_application_user[0].id : var.mq_application_user
 
