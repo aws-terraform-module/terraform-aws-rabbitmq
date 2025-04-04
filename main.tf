@@ -1,21 +1,21 @@
 locals {
   broker_security_groups = var.create_security_group ? [module.security_group[0].security_group_id] : var.security_groups
 
-  mq_application_user_needed = length(var.mq_application_user) == 0
-  mq_application_user        = local.mq_application_user_needed ? random_pet.mq_application_user[0].id : try(var.mq_application_user[0], "")
+  mq_application_user_needed = var.mq_application_user == ""
+  mq_application_user        = local.mq_application_user_needed ? random_pet.mq_application_user[0].id : var.mq_application_user
 
-  mq_application_password_needed = length(var.mq_application_password) == 0
-  mq_application_password        = local.mq_application_password_needed ? random_password.mq_application_password[0].result : try(var.mq_application_password[0], "")
+  mq_application_password_needed = var.mq_application_password == ""
+  mq_application_password        = local.mq_application_password_needed ? random_password.mq_application_password[0].result : var.mq_application_password
 }
 
 resource "random_pet" "mq_application_user" {
-  count     = local.mq_application_user_needed ? 1 : 0
+  count     = var.mq_application_user == "" ? 1 : 0
   length    = 2
   separator = "-"
 }
 
 resource "random_password" "mq_application_password" {
-  count   = local.mq_application_password_needed ? 1 : 0
+  count       = var.mq_application_password == "" ? 1 : 0
   length  = 24
   special = false
 }

@@ -60,15 +60,15 @@ variable "tags" {
 }
 
 variable "mq_application_user" {
-  type        = list(string)
+  type        = string
   description = "Application username"
-  default     = []
+  default     = ""
 }
 
 variable "mq_application_password" {
-  type        = list(string)
+  type        = string
   description = "Application password"
-  default     = []
+  default     = ""
   sensitive   = true
 }
 
