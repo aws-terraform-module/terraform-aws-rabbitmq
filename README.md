@@ -1,14 +1,17 @@
-# terraform-aws-rabbitmq
+## terraform-aws-rabbitmq
+
 We are publishing our module to [**RabbitMQ AWS Terraform**](https://registry.terraform.io/modules/mrnim94/rabbitmq/aws/latest)
 
 ## You can install RabbitMQ on AWS easily.
+
 I have refer 3 public modules:  
 https://github.dev/dasmeta/terraform-aws-rabbitmq/blob/main/security-group.tf  
 https://github.dev/vainkop/terraform-aws-rabbitmq/blob/master/main.tf  
-https://github.dev/cloudposse/terraform-aws-mq-broker/blob/master/variables.tf  
+https://github.dev/cloudposse/terraform-aws-mq-broker/blob/master/variables.tf
 
 ### Single-node and Create Security Group
-```hcl
+
+```plaintext
 provider "aws" {
   region     = var.aws_region
 }
@@ -70,10 +73,9 @@ module "rabbitmq" {
 }
 ```
 
-## Create Public RabbitMQ  
+## Create Public RabbitMQ
 
-
-```hcl
+```plaintext
 data "aws_vpc" "selected" {
   tags = {
     Name = "dev-mdcl-mdaas-engine" # Replace with your VPC's tag name
@@ -113,7 +115,7 @@ module "rabbitmq" {
 
 ### Get VPC and Subnets from the remote tfstate
 
-```hcl
+```plaintext
 # output "vpc_id" {
 #   value = data.aws_vpc.selected.id
 # }
@@ -166,11 +168,11 @@ module "rabbitmq" {
     }
   ]
 }
-``` 
+```
 
 ### Get VPC and Subnets from data sources
 
-```hcl
+```plaintext
 
 data "aws_vpc" "selected" {
   tags = {
@@ -234,13 +236,40 @@ module "rabbitmq" {
     }
   ]
 }
-
 ```
 
-Pay attention to: Deployment mode **[CLUSTER_MULTI_AZ]** is not available on instance type **[MQ_T3_MICRO]**
+Pay attention to: Deployment mode **\[CLUSTER\_MULTI\_AZ\]** is not available on instance type **\[MQ\_T3\_MICRO\]**
 
-## How to Get Password of RabbitMQ(AmazonMQ)   
+## Configure Username and Password for RabbitMQ(AmazonMQ)
+
+### Specify the RabbitMQ (AmazonMQ) username and password.
+
+You can proactively input a username and password for RabbitMQ (AmazonMQ) before installation using `mq_application_user`  and `mq_application_password`
+
+```plaintext
+module "rabbitmq" {
+  source  = "aws-terraform-module/rabbitmq/aws"
+  version = "1.3.0"
+  rabbitmq_name = "rabbitmq"
+  engine_version = "3.13"
+  auto_minor_version_upgrade = "true"
+  deployment_mode = "CLUSTER_MULTI_AZ"
+  subnet_ids = data.terraform_remote_state.network.outputs.private_subnets
+  vpc_id = data.terraform_remote_state.network.outputs.vpc_id
+  create_security_group = "true"
+  host_instance_type = "mq.m5.large"
+  publicly_accessible = "false"
+  ## Look At
+  mq_application_user = "username"
+  mq_application_password = "password1234567"
+```
+
+### Using a random username and password.
+
+If **mq\_application\_user** and **mq\_application\_password** are not provided, the module will generate a username and password for RabbitMQ (AmazonMQ).
+
+#### How to Get Password of RabbitMQ(AmazonMQ)
+
 You can get username and password in `terraform.tfstate` file
 
-
-[![Image](https://nimtechnology.com/wp-content/uploads/2023/04/image-96.png "[RabbitMQ/AWS] Install RabbitMQ on AWS based on Amazon MQ. ")](https://nimtechnology.com/2023/04/22/rabbitmq-aws-install-rabbitmq-on-aws-based-on-amazon-mq/)
+[![Image](https://nimtechnology.com/wp-content/uploads/2023/04/image-96.png)](https://nimtechnology.com/2023/04/22/rabbitmq-aws-install-rabbitmq-on-aws-based-on-amazon-mq/)
